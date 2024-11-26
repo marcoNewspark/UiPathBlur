@@ -45,7 +45,7 @@ def process_images(input_folder, output_folder, show_result=False):
         cv2.imwrite(output_path, blurred_image)
 
         # Record the input and output file paths
-        processed_files.append(f"Input: {input_path}, Output: {output_path}")
+        processed_files.append((input_path, output_path))
 
         # Show side-by-side comparison if requested
         if show_result:
@@ -53,7 +53,7 @@ def process_images(input_folder, output_folder, show_result=False):
             cv2.namedWindow('Original vs Blurred', cv2.WINDOW_NORMAL)
             cv2.resizeWindow('Original vs Blurred', 1024, 768)
             cv2.imshow('Original vs Blurred', combined)
-            cv2.waitKey(3000)  # Display for 3 seconds
+            cv2.waitKey(1500)  # Display for 1,5 seconds
             cv2.destroyAllWindows()
 
     return processed_files
@@ -67,8 +67,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     processed_files = process_images(args.input_folder, args.output_folder, args.show_blurring_result)
-    for entry in processed_files:
-        print(entry)
+    for input_file, output_file in processed_files:
+        print(f"Processed: Input file: {input_file}, Output file: {output_file}")
 
     # Output parameter for UiPath
     output_param = {'processed_files': processed_files}
