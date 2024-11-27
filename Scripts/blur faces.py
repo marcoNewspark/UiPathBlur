@@ -1,3 +1,4 @@
+import json
 import torch
 from facenet_pytorch import MTCNN
 import cv2
@@ -185,6 +186,9 @@ def process_images(input_folder, output_folder, show_blurring_result):
     
     total_images = 0
     total_faces = 0
+
+    
+    processed_files = []
     
     for filename in os.listdir(input_folder):
         if filename.lower().endswith(image_extensions):
@@ -206,6 +210,8 @@ def process_images(input_folder, output_folder, show_blurring_result):
                 
                 # Save the processed image
                 cv2.imwrite(output_path, processed_image)
+
+                processed_files.append((input_path, output_path))
                 
                 total_images += 1
                 total_faces += num_faces
@@ -246,6 +252,15 @@ def process_images(input_folder, output_folder, show_blurring_result):
     print(f"\nProcessing complete!")
     print(f"Total images processed: {total_images}")
     print(f"Total faces detected: {total_faces}")
+
+     # Convert the processed_files list to a dictionary
+    result_dict = {
+        "total_images": total_images,
+        "total_faces": total_faces,
+        "files": [{"input": input_path, "output": output_path} for input_path, output_path in processed_files]
+    }
+     # Convert to JSON string
+    return json.dumps(result_dict)
 
 def main():
     parser = argparse.ArgumentParser(description='Blur faces in images')
